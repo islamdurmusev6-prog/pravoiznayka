@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
 
 jobs:
   build:
@@ -21,24 +19,24 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
       - name: Install dependencies
         run: npm install
 
-      - name: Setup Expo
-        run: npm install -g eas-cli
+      - name: Build APK with Gradle
+        working-directory: android
+        run: ./gradlew assembleRelease
 
-      - name: Build APK
-        run: eas build --platform android --profile production --non-interactive
-        env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-
-      - name: Download APK
-        run: |
-          BUILD_ID=$(eas build list --platform android --limit 1 --json | jq -r '.[0].id')
-          echo "BUILD_ID=$BUILD_ID" >> $GITHUB_ENV
-          eas build:view $BUILD_ID --json > build-info.json
-          APK_URL=$(jq -r '.artifacts.buildUrl' build-info.json)
-          wget -O pravoiznayka.apk "$APK_URL"
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-release
+          path: android/app/build/outputs/apk/release/app-release.apk
 
       - name: Create Release
         id: create_release
@@ -47,13 +45,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: v${{ github.run_number }}
-          release_name: Release v${{ github.run_number }}
+          release_name: ПравоЗнайка v${{ github.run_number }}
           body: |
-            Автоматическая сборка ПравоЗнайка
+            🎉 Автоматическая сборка ПравоЗнайка
             
-            **Скачать APK:** pravoiznayka.apk
+            📱 **Скачайте APK ниже и установите на Android устройство**
             
-            Установите на Android устройство и используйте!
+            ✨ Функции:
+            - AI юридические консультации
+            - 10 категорий прав
+            - История консультаций
+            - Справочник контактов
+            - Шаблоны документов
           draft: false
           prerelease: false
 
@@ -63,6 +66,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./pravoiznayka.apk
-          asset_name: pravoiznayka.apk
+          asset_path: android/app/build/outputs/apk/release/app-release.apk
+          asset_name: pravoiznayka-v${{ github.run_number }}.apk
           asset_content_type: application/vnd.android.package-archive
