@@ -209,6 +209,7 @@ export default function App() {
             component={SettingsStack}
             options={{ title: 'Настройки' }}
           />
+        </Tab.Navigator>        
       </NavigationContainer>
     </>
   );
