@@ -27,9 +27,6 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Generate android folder (Expo prebuild)
-        run: npx expo prebuild --platform android --no-install
-
       - name: Build APK with Gradle
         working-directory: android
         run: |
@@ -41,26 +38,3 @@ jobs:
         with:
           name: pravoiznayka-apk
           path: android/app/build/outputs/apk/release/app-release.apk
-<<<<<<< HEAD
-=======
-
-      - name: Create Release and upload APK
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v${{ github.run_number }}
-          name: ПравоЗнайка v${{ github.run_number }}
-          body: |
-            🎉 Автоматическая сборка ПравоЗнайка
-
-            📱 **Скачайте APK ниже и установите на Android устройство**
-
-            ✨ Функции:
-            - AI юридические консультации
-            - 10 категорий прав
-            - История консультаций
-            - Справочник контактов
-            - Шаблоны документов
-          files: android/app/build/outputs/apk/release/app-release.apk
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
->>>>>>> d9594ab1fb26492b073e48190032687091b9221a
