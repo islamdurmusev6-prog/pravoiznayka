@@ -1,5 +1,4 @@
 name: Build APK
-
 on:
   push:
     branches:
@@ -9,18 +8,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
 
       - name: Setup Java
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -28,44 +27,35 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Generate android folder (Expo prebuild)
+        run: npx expo prebuild --platform android --no-install
+
       - name: Build APK with Gradle
         working-directory: android
         run: ./gradlew assembleRelease
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v3
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: android/app/build/outputs/apk/release/app-release.apk
 
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create Release and upload APK
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ github.run_number }}
-          release_name: ПравоЗнайка v${{ github.run_number }}
+          name: ПравоЗнайка v${{ github.run_number }}
           body: |
             🎉 Автоматическая сборка ПравоЗнайка
-            
+
             📱 **Скачайте APK ниже и установите на Android устройство**
-            
+
             ✨ Функции:
             - AI юридические консультации
             - 10 категорий прав
             - История консультаций
             - Справочник контактов
             - Шаблоны документов
-          draft: false
-          prerelease: false
-
-      - name: Upload APK to Release
-        uses: actions/upload-release-asset@v1
+          files: android/app/build/outputs/apk/release/app-release.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: android/app/build/outputs/apk/release/app-release.apk
-          asset_name: pravoiznayka-v${{ github.run_number }}.apk
-          asset_content_type: application/vnd.android.package-archive
