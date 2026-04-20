@@ -1,13 +1,14 @@
 import axios from 'axios';
 import { getCachedData, cacheData } from './cache';
+import Constants from 'expo-constants';
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
 // Несколько API ключей для распределения нагрузки
 const GROQ_API_KEYS = [
-  process.env.EXPO_PUBLIC_GROQ_API_KEY_1 || '',
-  process.env.EXPO_PUBLIC_GROQ_API_KEY_2 || '',
-  process.env.EXPO_PUBLIC_GROQ_API_KEY_3 || '',
+  process.env.EXPO_PUBLIC_GROQ_API_KEY_1 || Constants.expoConfig?.extra?.EXPO_PUBLIC_GROQ_API_KEY_1 || '',
+  process.env.EXPO_PUBLIC_GROQ_API_KEY_2 || Constants.expoConfig?.extra?.EXPO_PUBLIC_GROQ_API_KEY_2 || '',
+  process.env.EXPO_PUBLIC_GROQ_API_KEY_3 || Constants.expoConfig?.extra?.EXPO_PUBLIC_GROQ_API_KEY_3 || '',
 ].filter(key => key.length > 0);
 
 if (GROQ_API_KEYS.length === 0) {

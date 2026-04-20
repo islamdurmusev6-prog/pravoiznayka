@@ -27,6 +27,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Create .env file
+        run: |
+          echo "EXPO_PUBLIC_GROQ_API_KEY_1=${{ secrets.GROQ_API_KEY_1 }}" > .env
+          echo "EXPO_PUBLIC_GROQ_API_KEY_2=${{ secrets.GROQ_API_KEY_2 }}" >> .env
+          echo "EXPO_PUBLIC_GROQ_API_KEY_3=${{ secrets.GROQ_API_KEY_3 }}" >> .env
+
       - name: Build APK with Gradle
         working-directory: android
         run: |
