@@ -35,37 +35,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: app-release
+          name: pravoiznayka-apk
           path: android/app/build/outputs/apk/release/app-release.apk
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: v${{ github.run_number }}
-          release_name: ПравоЗнайка v${{ github.run_number }}
-          body: |
-            🎉 Автоматическая сборка ПравоЗнайка
-            
-            📱 **Скачайте APK ниже и установите на Android устройство**
-            
-            ✨ Функции:
-            - AI юридические консультации
-            - 10 категорий прав
-            - История консультаций
-            - Справочник контактов
-            - Шаблоны документов
-          draft: false
-          prerelease: false
-
-      - name: Upload APK to Release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: android/app/build/outputs/apk/release/app-release.apk
-          asset_name: pravoiznayka-v${{ github.run_number }}.apk
-          asset_content_type: application/vnd.android.package-archive
