@@ -8,14 +8,14 @@
 
 ```bash
 # 1. Клонирование
-git clone https://github.com/your-username/pravoiznayka.git
+git clone https://github.com/islamdurmusev6-prog/pravoiznayka.git
 cd pravoiznayka
 
 # 2. Установка
 npm install
 
 # 3. Конфигурация
-cp .env.example .env.local
+copy .env.example .env.local
 # Добавьте Groq API ключ в .env.local
 
 # 4. Запуск
@@ -23,6 +23,31 @@ npm start
 ```
 
 Отсканируйте QR-код в Expo Go! ✅
+
+## 📦 Масштабное распространение (без Expo Go)
+
+Для реальных пользователей используйте EAS сборки:
+
+```bash
+# APK для тестеров и прямой установки
+npm run build:preview
+
+# AAB для публикации в Google Play
+npm run build:production
+
+# Отправка в Google Play Console
+npm run submit:production
+```
+
+OTA обновления без переустановки:
+
+```bash
+# Обновление для тестовой ветки
+npm run update:preview
+
+# Обновление для production
+npm run update:production
+```
 
 ## 🔄 Автоматические обновления
 
@@ -62,7 +87,7 @@ npm start
 
 1. **Клонируйте репозиторий**
 ```bash
-git clone https://github.com/your-username/pravoiznayka.git
+git clone https://github.com/islamdurmusev6-prog/pravoiznayka.git
 cd pravoiznayka
 ```
 
@@ -79,7 +104,7 @@ npm install
 
 4. **Настройте переменные окружения**
 ```bash
-cp .env.example .env.local
+copy .env.example .env.local
 ```
 
 Отредактируйте `.env.local`:

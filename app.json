@@ -9,7 +9,13 @@
       "**/*"
     ],
     "updates": {
-      "enabled": false
+      "enabled": true,
+      "checkAutomatically": "ON_LOAD",
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/81425889-af12-48e8-b970-ad73aab11c59"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
     },
     "ios": {
       "bundleIdentifier": "com.pravoiznayka.app"

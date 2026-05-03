@@ -14,3 +14,5 @@ web-build/
 .env.local
 .DS_Store
 *.log
+*.apk
+*.aab
